@@ -88,6 +88,7 @@ int xkbwatch::waitEvent()
 		// X.h defines ShiftMask, LockMask, ControlMask, Mod1Mask, ...
 		// See also:
 		// http://www.x.org/releases/X11R7.6/doc/libX11/specs/XKB/xkblib.html#tracking_keyboard_state
+		// http://stackoverflow.com/questions/1859049/check-if-key-is-pressed-using-python-a-daemon-in-the-background
 		printf(
 			"group: 0x%X "
 			"locked_group: 0x%X "
