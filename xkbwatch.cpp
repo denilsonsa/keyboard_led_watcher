@@ -81,7 +81,48 @@ int xkbwatch::waitEvent()
 	// wait for Event (blocking)
 	XNextEvent(display, &xkbevent.core);
 	if (xkbevent.core.type == eventnum + XkbEventCode) {
+
+		// UGLY DEBUG BEGIN
+		XkbStateRec state;
+		XkbGetState(display, XkbUseCoreKbd, &state);
+		// X.h defines ShiftMask, LockMask, ControlMask, Mod1Mask, ...
+		// See also:
+		// http://www.x.org/releases/X11R7.6/doc/libX11/specs/XKB/xkblib.html#tracking_keyboard_state
+		printf(
+			"group: 0x%X "
+			"locked_group: 0x%X "
+			"base_group: 0x%X "
+			"latched_group: 0x%X\n"
+			"mods: 0x%X "
+			"base_mods: 0x%X "
+			"latched_mods: 0x%X "
+			"locked_mods: 0x%X "
+			"compat_state: 0x%X "
+			"grab_mods: 0x%X "
+			"compat_grab_mods: 0x%X "
+			"lookup_mods: 0x%X "
+			"compat_lookup_mods: 0x%X "
+			"ptr_buttons: 0x%X\n"
+		,
+			state.group,
+			state.locked_group,
+			state.base_group,
+			state.latched_group,
+			state.mods,
+			state.base_mods,
+			state.latched_mods,
+			state.locked_mods,
+			state.compat_state,
+			state.grab_mods,
+			state.compat_grab_mods,
+			state.lookup_mods,
+			state.compat_lookup_mods,
+			state.ptr_buttons
+		);
+		// UGLY DEBUG END
+
 		if (xkbevent.any.xkb_type == XkbIndicatorStateNotify) {
+			printf("changed: 0x%X state: 0x%X\n", xkbevent.indicators.changed, xkbevent.indicators.state);
 			// store new state
 			lednumlock   = xkbevent.indicators.state & NUM_LOCK_MASK;
 			ledcapslock  = xkbevent.indicators.state & CAPS_LOCK_MASK;
